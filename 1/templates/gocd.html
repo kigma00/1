@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>GoCD Settings</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../vendors/feather/feather.css">
+  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="../../vendors/select2/select2.min.css">
+  <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+  <link rel="stylesheet" href="../../vendors/mdi/css/materialdesignicons.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../../images/favicon.png" />
+  <style>
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f4f5f7;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .centered-form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 100px);
+      width: 100%;
+      padding-top: 150px;
+      padding-left: 50px;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px;
+      gap: 40px;
+    }
+
+    .form-column {
+      flex: 1;
+    }
+
+    .navbar-brand-wrapper h3 {
+      font-size: 24px;
+      margin-bottom: 0;
+    }
+
+    .navbar-brand-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-brand-wrapper h3 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-brand-wrapper h3 {
+        font-size: 18px;
+      }
+    }
+
+    .card-title,
+    .card-description {
+      font-size: 1.25rem;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .form-control {
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      font-size: 1.1rem;
+    }
+
+    .form-group input {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .form-control {
+      font-size: 1rem;
+      padding: 10px;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .error-message {
+      color: red;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.875rem;
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      display: none;
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: flex-end;
+      width: calc(100% - 40px);
+      max-width: 920px;
+      padding-right: 360px;
+      margin-top: 40px;
+    }
+
+    .btn-align-right {
+      margin-left: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <h3 style="color: darkblue; cursor: pointer;" onclick="location.href='index.html'">CodeVuln</h3>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav mr-lg-2">
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Login</a>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="centered-form">
+        <form method="POST" action="/submit">
+          <div class="form-container">
+            <div class="form-column">
+              <h3>GoCD Setting</h3>
+              <br><br>
+              <div class="form-group">
+                <label for="GoCD_pipeline">GoCD Pipeline Name</label>
+                <input type="text" class="form-control" id="GoCD_pipeline" name="GoCD_pipeline" placeholder="GoCD Pipeline">
+                <div class="error-message" id="error-GoCD_pipeline">Please fill out this field.</div>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="GoCD_giturl">GoCD Repository URL</label>
+                <input type="text" class="form-control" id="GoCD_giturl" name="GoCD_giturl" placeholder="GoCD Repository URL">
+                <div class="error-message" id="error-GoCD_giturl">Please fill out this field.</div>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="test_shell_script">Shell Script to run on the pipeline</label>
+                <input type="text" class="form-control" id="test_shell_script" name="test_shell_script" placeholder="Shell Script">
+                <div class="error-message" id="error-test_shell_script">Please fill out this field.</div>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="GoCD_group">GoCD Group Name</label>
+                <input type="text" class="form-control" id="GoCD_group" name="GoCD_group" placeholder="Group Name">
+                <div class="error-message" id="error-GoCD_group">Please fill out this field.</div>
+              </div>
+            </div>
+            <div class="form-column">
+              <h3>GitHub Repository Update Setting</h3>
+              <br><br>
+              <div class="form-group">
+                <label for="Github_owner">GitHub User (Username OR Organization name)</label>
+                <input type="text" class="form-control" id="Github_owner" name="Github_owner" placeholder="GitHub User">
+                <div class="error-message" id="error-Github_owner">Please fill out this field.</div>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="Github_repo">GitHub Repository Name</label>
+                <input type="text" class="form-control" id="Github_repo" name="Github_repo" placeholder="GitHub Repository Name">
+                <div class="error-message" id="error-Github_repo">Please fill out this field.</div>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="Github_token">GitHub Private Access Token</label>
+                <input type="text" class="form-control" id="Github_token" name="Github_token" placeholder="Private Access Token">
+                <div class="error-message" id="error-Github_token">Please fill out this field.</div>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="Github_path">Path to the YAML file to be stored in the GitHub repository</label>
+                <input type="text" class="form-control" id="Github_path" name="Github_path" placeholder=".yaml file path">
+                <div class="error-message" id="error-Github_path">Please fill out this field.</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-buttons btn-align-right">
+            <button type="submit" class="btn btn-primary mr-2" id="submitBtn">Submit</button>
+            <button type="button" class="btn btn-light" id="cancelBtn">Cancel</button>
+          </div>
+        </form>
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../../vendors/select2/select2.min.js"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="../../js/off-canvas.js"></script>
+  <script src="../../js/hoverable-collapse.js"></script>
+  <script src="../../js/template.js"></script>
+  <script src="../../js/settings.js"></script>
+  <script src="../../js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../../js/file-upload.js"></script>
+  <script src="../../js/typeahead.js"></script>
+  <script src="../../js/select2.js"></script>
+  <!-- End custom js for this page-->
+  <script>
+    document.getElementById('submitBtn').addEventListener('click', function (event) {
+      var inputs = document.querySelectorAll('.form-control');
+      var allFilled = true;
+
+      inputs.forEach(function (input) {
+        var errorDiv = document.getElementById('error-' + input.id);
+        if (input.value === '') {
+          allFilled = false;
+          errorDiv.style.display = 'block';
+        } else {
+          errorDiv.style.display = 'none';
+        }
+      });
+
+      if (!allFilled) {
+        event.preventDefault();
+      }
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+
+</html>

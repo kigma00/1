@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Analysis Results</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../vendors/feather/feather.css">
+  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="../../vendors/select2/select2.min.css">
+  <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+  <link rel="stylesheet" href="../../vendors/mdi/css/materialdesignicons.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../../images/favicon.png" />
+  <style>
+    @font-face {
+      font-family: 'Manrope';
+      src: url('../../fonts/Manrope/Manrope-Regular.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Nunito';
+      src: url('../../fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Roboto';
+      src: url('../../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f4f5f7;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .container {
+      padding: 100px 20px 20px 20px;
+    }
+
+    .chart-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .chart {
+      width: 100%;
+      max-width: 1200px;
+      height: 600px;
+      margin-bottom: 40px;
+    }
+
+    h3 {
+      font-family: 'Roboto', sans-serif;
+      color: darkblue;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .navbar-brand-wrapper h3 {
+      font-size: 24px;
+      margin-bottom: 0;
+      cursor: pointer;
+      line-height: 1;
+      padding-bottom: 20px;
+    }
+
+    .navbar-brand-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-brand-wrapper h3 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-brand-wrapper h3 {
+        font-size: 18px;
+      }
+    }
+
+    .navbar-brand-wrapper h3,
+    .navbar-menu-wrapper .nav-link,
+    .container h3,
+    .card-title,
+    .card-description,
+    .chart-container,
+    .btn {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .download-button {
+      position: absolute;
+      top: 130px;
+      right: 60px;
+      font-size: 1.1rem;
+      padding: 12px 24px;
+    }
+
+    .chartjs-legend ul {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .chartjs-legend ul li {
+      margin: 0 10px;
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <h3 style="color: darkblue;" onclick="location.href='index.html'">CodeVuln</h3>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav mr-lg-2"></ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Login</a>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="container">
+        <h3>OWASP Top 10 Analysis Results</h3><br><br>
+        <div class="chart-container">
+          <canvas id="owaspChart" class="chart"></canvas>
+          <div id="chartjs-legend" class="chartjs-legend"></div>
+        </div>
+        <button class="btn btn-primary download-button" onclick="downloadResults()">Download Results</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../../vendors/select2/select2.min.js"></script>
+  <script src="../../js/off-canvas.js"></script>
+  <script src="../../js/hoverable-collapse.js"></script>
+  <script src="../../js/template.js"></script>
+  <script src="../../js/settings.js"></script>
+  <script src="../../js/todolist.js"></script>
+  <script src="../../js/file-upload.js"></script>
+  <script src="../../js/typeahead.js"></script>
+  <script src="../../js/select2.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script>
+    const labels = [
+      'Broken Access Control',
+      'Cryptographic Failures',
+      'Injection',
+      'Insecure Design',
+      'Security Misconfiguration',
+      'Vulnerable and Outdated Components',
+      'Identification and Authentication Failures',
+      'Software and Data Integrity Failures',
+      'Security Logging and Monitoring Failures',
+      'Server-Side Request Forgery (SSRF)'
+    ];
+
+    const links = {
+      'Broken Access Control': 'https://owasp.org/Top10/A01_2021-Broken_Access_Control/',
+      'Cryptographic Failures': 'https://owasp.org/Top10/A02_2021-Cryptographic_Failures/',
+      'Injection': 'https://owasp.org/Top10/A03_2021-Injection/',
+      'Insecure Design': 'https://owasp.org/Top10/A04_2021-Insecure_Design/',
+      'Security Misconfiguration': 'https://owasp.org/Top10/A05_2021-Security_Misconfiguration/',
+      'Vulnerable and Outdated Components': 'https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/',
+      'Identification and Authentication Failures': 'https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/',
+      'Software and Data Integrity Failures': 'https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/',
+      'Security Logging and Monitoring Failures': 'https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/',
+      'Server-Side Request Forgery (SSRF)': 'https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery/'
+    };
+
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'Number of Vulnerabilities',
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Initialize with zeros
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    };
+
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 10 // 초기 최대값을 설정합니다.
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    };
+
+    let owaspChart;
+
+    window.onload = function() {
+      const ctx = document.getElementById('owaspChart').getContext('2d');
+      owaspChart = new Chart(ctx, config);
+      loadCsvAndUpdateChart('/test/integrated_result.csv');  // 여기에 결과 파일의 실제 경로를 넣으세요.
+      document.getElementById('chartjs-legend').innerHTML = owaspChart.generateLegend();
+    }
+
+    function loadCsvAndUpdateChart(filePath) {
+      Papa.parse(filePath, {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        complete: function(results) {
+          const owaspCounts = {
+            'Broken Access Control': 0,
+            'Cryptographic Failures': 0,
+            'Injection': 0,
+            'Insecure Design': 0,
+            'Security Misconfiguration': 0,
+            'Vulnerable and Outdated Components': 0,
+            'Identification and Authentication Failures': 0,
+            'Software and Data Integrity Failures': 0,
+            'Security Logging and Monitoring Failures': 0,
+            'Server-Side Request Forgery (SSRF)': 0
+          };
+
+          const vulnerabilityMapping = {
+            'Prototype-polluting function': 'Broken Access Control',
+            'User-controlled bypass of security check': 'Broken Access Control',
+            'Use of a broken or weak cryptographic algorithm': 'Cryptographic Failures',
+            'DOM text reinterpreted as HTML': 'Injection',
+            'Incomplete multi-character sanitization': 'Injection',
+            'Incomplete string escaping or encoding': 'Injection',
+            'Incomplete URL substring sanitization': 'Injection',
+            'Missing regular expression anchor': 'Injection',
+            'Useless regular-expression character escape': 'Injection',
+            'Unsafe HTML constructed from library input': 'Injection',
+            'Unsafe jQuery plugin': 'Injection',
+            'Untrusted data passed to external API': 'Injection',
+            'Indirect uncontrolled command line': 'Injection',
+            'Log injection': 'Injection',
+            'Regular expression injection': 'Injection',
+            'Remote property injection': 'Injection',
+            'Shell command built from environment values': 'Injection',
+            'Type confusion through parameter tampering': 'Injection',
+            'Uncontrolled data used in path expression': 'Injection',
+            'Unvalidated dynamic method call': 'Injection',
+            'Insecure randomness': 'Insecure Design',
+            'Missing origin verification in \'postMessage\' handler': 'Security Misconfiguration',
+            'Missing X-Frame-Options HTTP header': 'Security Misconfiguration',
+            'Hard-coded credentials': 'Identification and Authentication Failures',
+            'Password in configuration file': 'Identification and Authentication Failures',
+            'Server-side request forgery': 'Server-Side Request Forgery (SSRF)'
+          };
+
+          results.data.forEach(row => {
+            const category = vulnerabilityMapping[row.name];
+            if (category && owaspCounts.hasOwnProperty(category)) {
+              owaspCounts[category]++;
+            }
+          });
+
+          const maxCount = Math.max(...Object.values(owaspCounts)) + 10; // 최대값을 +10하여 설정
+
+          owaspChart.options.scales.y.suggestedMax = maxCount;
+          owaspChart.data.datasets[0].data = Object.values(owaspCounts);
+          owaspChart.update();
+        }
+      });
+    }
+
+    function downloadResults() {
+      const link = document.createElement('a');
+      link.href = '/home/codevuln/scan_result/{date}_{time}_{directory_name}/integrated_result.csv';  // 여기에 결과 파일의 실제 경로를 넣으세요.
+      link.download = 'integrated_result.csv';  // 다운로드할 파일 이름을 넣으세요.
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const legendItems = document.querySelectorAll('#chartjs-legend li');
+      legendItems.forEach(item => {
+        item.addEventListener('click', function() {
+          const text = item.textContent;
+          if (links[text]) {
+            window.open(links[text], '_blank');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

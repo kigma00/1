@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Running</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loading-message {
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-message">Running Query...</div>
+
+    <script>
+    const scanId = "{{ scan_id }}"; // scan_id를 서버로부터 전달받아 저장합니다.
+
+    function checkScanStatus() {
+        fetch(`/check_process/${scanId}`)
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.status === "done" && data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(function(error) {
+                console.log('Error checking scan status:', error);
+            });
+    }
+
+    window.onload = function() {
+        setInterval(checkScanStatus, 1000);
+    };
+    </script>
+</body>
+</html>
