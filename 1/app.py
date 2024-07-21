@@ -324,6 +324,7 @@ def submit_form():
     Github_owner = request.form['Github_owner']
     Github_repo = request.form['Github_repo']
     Github_token = request.form['Github_token']
+    Github_path = request.form['Github_path']
     
     # 제공된 코드 문자열
     code_string = f"""
